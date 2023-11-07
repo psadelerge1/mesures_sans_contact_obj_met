@@ -26,5 +26,4 @@ valnum(x) =
 1 : freq   ||  2 : magnitude ch1  ||  3 : magnitude ch2  ||  5 : phase  ||
 6 : resistance  ||  7 : Inductance  ||  9 : resistance parallel  ||  
 10 : inductance parallel || 13 : Q factor
-a
 %}
