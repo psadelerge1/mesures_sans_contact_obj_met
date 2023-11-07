@@ -10,7 +10,7 @@ epaisseur = 2.21;     %epaisseur du couvercle
 l4        = 0;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
-c1=20.1e6; %Conductivites m1
+c1=42.2e6; %Conductivites m1
 c2 = 0 ; %Conductivites m2
 sig = [c1 c2];
 
@@ -19,7 +19,7 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 Freq = 330; %en kHz
-t1 = 25;  %Epaisseur de la plaque conductrice en mm
+t1 = 4;  %Epaisseur de la plaque conductrice en mm
 l0 = 0.1;  %Distance capteur-cible en mm
 val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 Val_L=imag(val_integral)/(2*pi*Freq*1000)
