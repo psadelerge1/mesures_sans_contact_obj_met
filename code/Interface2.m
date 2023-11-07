@@ -194,7 +194,12 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
 fopen(s);   
-val = fscanf(s)
+fprintf(s,'*TRG');
+fprintf(s,'OUTPUT,ON');
+fprintf(s,'FREQUE,330e3');
+fprintf(s,'LCR?');
+
+val = fscanf(s);
 valnum = str2num(val);
 fclose(s);
 msgbox(sprintf('%d', valnum(7)))

@@ -1,12 +1,7 @@
-%test
-
- jy
-% s.Flow='none';
-
+s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-%fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
 fprintf(s,'FREQUE,330e3');
 m =3;
 for n = 1:m
@@ -14,8 +9,7 @@ for n = 1:m
     pause(0.5);
 end
 fprintf(s,'LCR?');
-val = fscanf(s)
-%idn = fscanf(s);
+val = fscanf(s);
 
 fclose(s);
 
