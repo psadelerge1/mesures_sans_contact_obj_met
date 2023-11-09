@@ -202,5 +202,7 @@ fprintf(s,'LCR?');
 val = fscanf(s);
 valnum = str2num(val);
 fclose(s);
-msgbox(sprintf('%d', valnum(7)))
+set(handles.edit5,'string',valnum(7));
+set(handles.edit6,'string',valnum(6));
+%msgbox(sprintf('%d', valnum(7)))
 
