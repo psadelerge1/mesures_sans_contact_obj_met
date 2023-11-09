@@ -162,6 +162,12 @@ function edit5_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
+fopen(s);
+val = fscanf(s);
+valnum = str2num(val);
+fclose(s);
+
 
 
 
