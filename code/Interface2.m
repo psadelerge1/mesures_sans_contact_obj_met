@@ -22,7 +22,7 @@ function varargout = Interface2(varargin)
 
 % Edit the above text to modify the response to help Interface2
 
-% Last Modified by GUIDE v2.5 06-Nov-2023 16:52:47
+% Last Modified by GUIDE v2.5 09-Nov-2023 09:48:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -86,7 +86,7 @@ Freq_test = 1111;
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 %fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
-fprintf(s,'FREQUE,Freq_test');
+fprintf(s,'FREQUE,33e3');
 m =3;
 for n = 1:m
     fprintf(s,'BEEP');
@@ -218,3 +218,21 @@ set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
 %msgbox(sprintf('%d', valnum(7)))
 
+
+
+
+% --- Executes during object creation, after setting all properties.
+function axes2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes2
+imshow('C:\travail\mesures_sans_contact_obj_met\code\imageBG.png')
+
+
+% --- Executes on mouse press over axes background.
+function axes2_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to axes2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
