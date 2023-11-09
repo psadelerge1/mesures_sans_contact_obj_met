@@ -22,7 +22,7 @@ function varargout = Interface2(varargin)
 
 % Edit the above text to modify the response to help Interface2
 
-% Last Modified by GUIDE v2.5 09-Nov-2023 09:48:06
+% Last Modified by GUIDE v2.5 09-Nov-2023 11:07:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -220,19 +220,11 @@ set(handles.edit6,'string',valnum(6));
 
 
 
-
 % --- Executes during object creation, after setting all properties.
-function axes2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to axes2 (see GCBO)
+function axes3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: place code in OpeningFcn to populate axes2
+% Hint: place code in OpeningFcn to populate axes3
 imshow('C:\travail\mesures_sans_contact_obj_met\code\imageBG.png')
-
-
-% --- Executes on mouse press over axes background.
-function axes2_ButtonDownFcn(hObject, eventdata, handles)
-% hObject    handle to axes2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
