@@ -80,10 +80,13 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
+Freq = get(handles.edit2,'String')
+Freq_test = 1111;
+%Freq = Freq * 1000
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 %fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
-fprintf(s,'FREQUE,33e3');
+fprintf(s,'FREQUE,Freq_test');
 m =3;
 for n = 1:m
     fprintf(s,'BEEP');
@@ -162,11 +165,13 @@ function edit5_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+%{
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
 fopen(s);
 val = fscanf(s);
 valnum = str2num(val);
 fclose(s);
+%}
 
 
 
@@ -198,11 +203,12 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
 fopen(s);   
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,330e3');
+fprintf(s,'FREQUE,Freq');
 fprintf(s,'LCR?');
 
 val = fscanf(s);
