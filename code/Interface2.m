@@ -80,14 +80,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
-<<<<<<< HEAD
 Freq = get(handles.edit2,'String')
 %Freq = Freq * 1000
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 %fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
 fprintf(s,'FREQUE,Freq');
-=======
 Freq_str = get(handles.edit2,'string')
 Freq_str =char(Freq_str);
 class(Freq_str)
@@ -101,7 +99,6 @@ fprintf(s,'OUTPUT,ON');
 
 fprintf(s,['FREQUE,' Freq_str]);
 
->>>>>>> 9b1a263c4b7fd7df7b25ebf81a0a60049657c7a4
 m =3;
 for n = 1:m
     fprintf(s,'BEEP');
@@ -190,9 +187,6 @@ valnum = str2num(val);
 fclose(s);
 %}
 
-
-
-
 function edit6_Callback(hObject, eventdata, handles)
 % hObject    handle to edit6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -236,6 +230,7 @@ set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
 %msgbox(sprintf('%d', valnum(7)))
 
+<<<<<<< Updated upstream
 
 
 % --- Executes during object creation, after setting all properties.
@@ -246,3 +241,13 @@ function axes3_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate axes3
 imshow('C:\travail\sadeler\projet_git\mesures_sans_contact_obj_met\code\imageBG.png')
+=======
+function axes1CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+imshow('C:\travail\mesures_sans_contact_obj_met\code\image-removebg-preview (1).png')
+>>>>>>> Stashed changes
