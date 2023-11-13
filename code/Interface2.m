@@ -80,6 +80,14 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
+<<<<<<< HEAD
+Freq = get(handles.edit2,'String')
+%Freq = Freq * 1000
+fprintf(s,'*TRG');
+fprintf(s,'OUTPUT,ON');
+%fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
+fprintf(s,'FREQUE,Freq');
+=======
 Freq_str = get(handles.edit2,'string')
 Freq_str =char(Freq_str);
 class(Freq_str)
@@ -92,6 +100,7 @@ fprintf(s,'OUTPUT,ON');
 
 fprintf(s,['FREQUE,' Freq_str]);
 
+>>>>>>> 9b1a263c4b7fd7df7b25ebf81a0a60049657c7a4
 m =3;
 for n = 1:m
     fprintf(s,'BEEP');
