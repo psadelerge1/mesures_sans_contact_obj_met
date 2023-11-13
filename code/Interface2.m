@@ -80,18 +80,36 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
+<<<<<<< HEAD
 Freq = get(handles.edit2,'String')
 %Freq = Freq * 1000
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 %fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
 fprintf(s,'FREQUE,Freq');
+=======
+Freq_str = get(handles.edit2,'string')
+Freq_str =char(Freq_str);
+class(Freq_str)
+
+Freq_test = 1e3;
+fprintf(s,'*TRG');
+fprintf(s,'OUTPUT,ON');
+%fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
+%eval('fprintf(s,FREQUE,' Freq_str ');')
+%eval(['fprintf(s,FREQUE,' Freq_str ');'])
+
+fprintf(s,['FREQUE,' Freq_str]);
+
+>>>>>>> 9b1a263c4b7fd7df7b25ebf81a0a60049657c7a4
 m =3;
 for n = 1:m
     fprintf(s,'BEEP');
     pause(0.25);
 end
 fprintf(s,'LCR?');
+
+
 fclose(s);
 msgbox('Réglage PSM OK')
 
@@ -203,16 +221,17 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
-fopen(s);   
+s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
+fopen(s);
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,Freq');
+fprintf(s,'FREQUE,33e3');
 fprintf(s,'LCR?');
-
 val = fscanf(s);
-valnum = str2num(val);
+
 fclose(s);
+
+valnum = str2num(val);
 set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
 %msgbox(sprintf('%d', valnum(7)))
@@ -226,4 +245,4 @@ function axes3_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: place code in OpeningFcn to populate axes3
-imshow('C:\travail\mesures_sans_contact_obj_met\code\imageBG.png')
+imshow('C:\travail\sadeler\projet_git\mesures_sans_contact_obj_met\code\imageBG.png')
