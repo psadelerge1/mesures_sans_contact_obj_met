@@ -90,7 +90,6 @@ Freq_str = get(handles.edit2,'string')
 Freq_str =char(Freq_str);
 class(Freq_str)
 
-Freq_test = 1e3;
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 %fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
