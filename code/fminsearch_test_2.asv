@@ -57,14 +57,14 @@ Z_sim = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 %E_Z=abs(Z_mes-Z_sim)^2;
 
 c1_0= [5.1];
-
+c1= fminsearch(fun,sig0,options)
 sig =[c1,0]; 
-f=@(c1,Z_mes)abs(Z_mes-Z_integral(coil,Freq,t1,l0,sig,mu,cup))^2;
-fun = @(c1)f(c1,Z_mes);
+f=@(Z_sim,Z_mes)abs(Z_mes-c1)^2;
+fun = @(Z_sim)f(Z_sim,Z_mes);
 
 options = optimset('PlotFcns',@optimplotfval);
 
-Res= fminsearch(fun,c1_0,options)
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
