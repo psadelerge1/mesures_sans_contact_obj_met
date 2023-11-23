@@ -43,7 +43,7 @@ format long
   thick4n = cup(3)/rbar; l4=cup(4)/rbar;
 %----------------------------------------------------------
 % Constantes de propagation pour toutes les frequences
-  puls = 2*pi*Freq*1000;  %w
+  puls = 2*pi*Freq;  %w
   csten = rbar*rbar*1E-6; %  § § §
   w2ue0 = csten*puls.*puls*mu0*eps0;
   wusr1 = csten*puls*mu0*sig(1);
@@ -78,7 +78,7 @@ end
  % xjr2m1 = (1/x^3) * integrale( J1(z) z dz )
  %		dans l'intervalle  [z1=x*r1 , z2=x*r2]
  f = @(zz) besselj(1,zz).*zz;
- size(x)
+ size(x);
  for k=1:length(x) 
 %   xjr2m1(k) = (1/x(k)^3)* (-0.5.*pi.*(x(k)*r2.*((besselj(0,x(k)*r2).*StruveH1(x(k)*r2)-besselj(1,x(k)*r2).*StruveH0(x(k)*r2)))-x(k)*r1.*((besselj(0,x(k)*r1).*StruveH1(x(k)*r1)-besselj(1,x(k)*r1).*StruveH0(x(k)*r1)))));
 %   (-0.5.*pi.*(a.*2.*((besselj(0,a.*2).*StruveH1(a.*2)-besselj(1,a.*2).*StruveH0(a.*2)))-a.*((besselj(0,a).*StruveH1(a)-besselj(1,a).*StruveH0(a)))))
