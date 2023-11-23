@@ -1,3 +1,19 @@
+s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
+fopen(s);
+fprintf(s,'*TRG');
+fprintf(s,'OUTPUT,ON');
+fprintf(s,'FREQUE,33e3');
+m =3;
+for n = 1:m
+    fprintf(s,'BEEP');
+    pause(0.5);
+end
+fprintf(s,'LCR?');
+val = fscanf(s);
+
+fclose(s);
+
+
 r1  = 10.23;        %rayon interieur bobine d = 20.46
 r2  = 21.315;       %rayon exterieur bobine d = 42.63 mm
 l3      = 2.45;   %hauteur bobine 
@@ -24,20 +40,7 @@ l0 = 0.1;  %Distance capteur-cible en mm
 
 
 
-s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
-fopen(s);
-fprintf(s,'*TRG');
-fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,33e3');
-m =3;
-for n = 1:m
-    fprintf(s,'BEEP');
-    pause(0.5);
-end
-fprintf(s,'LCR?');
-val = fscanf(s);
 
-fclose(s);
 
 valnum = str2num(val);
 %{
@@ -48,23 +51,43 @@ valnum(x) =
 10 : inductance parallel || 13 : Q factor
 %}
 
-Freq = valnum(1);
-omeg = 2*pi*Freq;
+Freq = valnum(1)/1000;%on récup val IAI
+omeg = 2*pi*Freq*1000;
 Res  = valnum(6);
 Ind  = valnum(7);
-Z_mes = Res+Ind*omeg*j;
-Z_sim = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
+Z_mes = Res+Ind*omeg*j
+val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup)
+%delta_Indu=Ind-imag(val_integral)/(2*pi*Freq*1000)
+%Ind_mes = Ind
+%Ind_sim =imag(val_integral)/(2*pi*Freq*1000)
+%{
+coil
+Freq
+t1
+l0
+sig
+mu
+cup
+%}
+
+%Z_sim = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 %E_Z=abs(Z_mes-Z_sim)^2;
 
-c1_0= [5.1];
 
-sig =[c1,0]; 
-f=@(c1,Z_mes)abs(Z_mes-Z_integral(coil,Freq,t1,l0,sig,mu,cup))^2;
-fun = @(c1)f(c1,Z_mes);
+f=@(c1)abs(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
+%f=@(c1)(Ind-(imag(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup))/(2*pi*Freq*1000)))+(Res-real(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)));
+fun = @(c1)f(c1);
 
+%{
+ Z_mes
+Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)
+ABS=abs(Z_mes-(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)))^2
+%}
+
+c1_0=5.1e6;
 options = optimset('PlotFcns',@optimplotfval);
 
-Res= fminsearch(fun,c1_0,options)
+c1= fminsearch(fun,c1_0,options)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
