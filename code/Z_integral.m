@@ -36,15 +36,15 @@ format long
  mu0  = 4.0E-7*pi;  
  j=sqrt(-1); %pas besoin 
 %----------------------------------------------------------
-% Normalisation des grandeurs geometriques   § § § § §
-  rbar =0.5*(r1+r2);  % §
+% Normalisation des grandeurs geometriques  Â§Â§Â§Â§Â§
+  rbar =0.5*(r1+r2);  %Â§
   r1=r1/rbar;		r2=r2/rbar; l3=l3/rbar;  %for nor,al
   l0=l0/rbar;		t1=t1/rbar;
   thick4n = cup(3)/rbar; l4=cup(4)/rbar;
 %----------------------------------------------------------
 % Constantes de propagation pour toutes les frequences
-  puls = 2*pi*Freq;  %w
-  csten = rbar*rbar*1E-6; %  § § §
+  puls = 2*pi*Freq*1000;  %w
+  csten = rbar*rbar*1E-6; % Â§Â§Â§
   w2ue0 = csten*puls.*puls*mu0*eps0;
   wusr1 = csten*puls*mu0*sig(1);
   wusr3 = csten*puls*mu0*sig(2);
@@ -77,8 +77,8 @@ end
  %  xjr2m1 : vecteur de taille identique Ã  x
  % xjr2m1 = (1/x^3) * integrale( J1(z) z dz )
  %		dans l'intervalle  [z1=x*r1 , z2=x*r2]
- f = @(zz) besselj(1,zz).*zz;
- size(x);
+ f = @(zz) besselj(1,zz).*zz
+ size(x)
  for k=1:length(x) 
 %   xjr2m1(k) = (1/x(k)^3)* (-0.5.*pi.*(x(k)*r2.*((besselj(0,x(k)*r2).*StruveH1(x(k)*r2)-besselj(1,x(k)*r2).*StruveH0(x(k)*r2)))-x(k)*r1.*((besselj(0,x(k)*r1).*StruveH1(x(k)*r1)-besselj(1,x(k)*r1).*StruveH0(x(k)*r1)))));
 %   (-0.5.*pi.*(a.*2.*((besselj(0,a.*2).*StruveH1(a.*2)-besselj(1,a.*2).*StruveH0(a.*2)))-a.*((besselj(0,a).*StruveH1(a)-besselj(1,a).*StruveH0(a)))))
@@ -89,7 +89,7 @@ end
  
 %  figure 
 %  plot(x,'+-')
-%  figure     
+%  figure
 %   plot(x,xjr2m1,'+-')
   
  tt1 = turn/((r2-r1)*l3);  % n/.... 
@@ -151,5 +151,3 @@ for jfreq=1:length(Freq)
   z(jfreq) = cste(jfreq) * T;
 
 end  %(for jfreq)
-%Mesure sans contact d’objet métallique
-
