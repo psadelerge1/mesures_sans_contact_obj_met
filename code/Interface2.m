@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 function varargout = Interface2(varargin)
 % INTERFACE2 MATLAB code for Interface2.fig
 %      INTERFACE2, by itself, creates a new INTERFACE2 or raises the existing
@@ -247,3 +248,5 @@ function axes1CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 imshow('C:\travail\mesures_sans_contact_obj_met\code\image-removebg-preview (1).png')
+=======
+>>>>>>> Stashed changes

@@ -12,7 +12,7 @@ for n = 1:m
 end
 %}
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,20000');
+fprintf(s,'FREQUE,1.953437500000000e+04');
 pause(2);
 fprintf(s,'*TRG');
 pause(2);
@@ -43,7 +43,7 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 20;  %Epaisseur de la plaque conductrice en mm
+t1 = 25;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 
@@ -59,7 +59,7 @@ valnum(x) =
 10 : inductance parallel || 13 : Q factor
 %}
 pause(0.5);
-Freq = valnum(1)%on récup val IAI
+Freq = valnum(1);%on récup val IAI
 omeg = 2*pi*Freq;
 Res  = valnum(6)-0.075;
 Ind  = valnum(7);
@@ -84,12 +84,16 @@ cup
 %E_Z=abs(Z_mes-Z_sim)^2;
 
 
-f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
-%I_ressssss=abs(Z_integral(coil,Freq,t1,l0,[0.61,0],mu,cup)-Z_mes)^2
+%f=@(c1)abs((Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)/real(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)))-(Z_mes/real(Z_mes)))^2;
 
+%f=@(c1)(real(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-real(Z_mes))+(imag(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-imag(Z_mes));
+g=@(f1)abs(Z_integral(coil,f1/1000,t1,l0,[c1_1,0],mu,cup)-Z_mes)^2;
+%I_ressssss=abs(Z_integral(coil,Freq,t1,l0,[0.61,0],mu,cup)-Z_mes)^2
+f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes);
 %f=@(c1)abs(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)-Z_integral(coil,Freq,t1,l0,[20.1e6,0],mu,cup))^2;
 %f=@(c1)(Ind-(imag(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup))/(2*pi*Freq*1000)))+(Res-0.078-real(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)));
 fun = @(c1)f(c1);
+gun = @(f1)g(f1);
 
 %{
  Z_mes
@@ -98,13 +102,15 @@ ABS=abs(Z_mes-(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)))^2
 %}
 
 c1_0=5e6;
+f1_0 = 3.5e3;
 options = optimset('PlotFcns',@optimplotfval,'MaxIter', 15);
 
 
 c_res= fminsearch(fun,c1_0,options)
+%f_res= fminsearch(gun,f1_0,options)
 Freq
-cond=0.61e6
-Ind  = valnum(7)
+cond=20.1e6
+%Ind  = valnum(7)
 
 %test_ana = Z_integral(coil,Freq,t1,l0,[c_res,0],mu,cup)
 %test_sim = Z_integral(coil,Freq,t1,l0,[42.2e6,0],mu,cup)
