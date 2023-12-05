@@ -5,7 +5,9 @@ fopen(s);
 try
     % Configuration du dispositif externe
     fprintf(s, 'OUTPUT,ON');
-    fprintf(s, 'FREQUE,1.953437500000000e+04');
+    
+    Freq = 500;
+    fprintf(s, ['FREQUE,',num2str(Freq)]);
     pause(2);
     fprintf(s, '*TRG');
     pause(2);
@@ -36,7 +38,7 @@ try
     l4 = 0.1;
     cup = [sigma, mu_r, epaisseur, l4];
 
-    c1_1 = 20.1e6;
+    c1_1 = 58.2e6;
     c2 = 0;
     sig = [c1_1, c2];
 
@@ -44,7 +46,7 @@ try
     mu_2 = 1;
     mu = [mu_1, mu_2];
 
-    t1 = 25;
+    t1 = 6;
     l0 = 0;
 
     % Fonction d'optimisation
@@ -57,7 +59,8 @@ try
 
     % Optimisation
     c_res = fminsearch(fun, c1_0, options);
-
+    
+    %fprintf(s, ['FREQUE,',num2str(Freq)]);
     % Affichage des résultats
     disp('Résultats de l''optimisation :');
     disp(['Conductivité optimale : ']);

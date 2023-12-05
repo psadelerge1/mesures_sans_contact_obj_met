@@ -12,14 +12,14 @@ for n = 1:m
 end
 %}
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,1.953437500000000e+04');
+fprintf(s,'FREQUE,3e3');
 pause(2);
 fprintf(s,'*TRG');
 pause(2);
 fprintf(s,'LCR?');
 val = fscanf(s);
 
-fclose(s);
+
 
 
 r1  = 10.23;        %rayon interieur bobine d = 20.46
@@ -34,7 +34,7 @@ epaisseur = 2.21;     %epaisseur du couvercle
 l4        = 0.1;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
-c1_1=20.1e6; %Conductivites m1
+c1_1=0.61e6; %Conductivites m1
 c2 = 0 ; %Conductivites m2
 sig = [c1_1 c2];
 
@@ -43,7 +43,7 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 25;  %Epaisseur de la plaque conductrice en mm
+t1 = 20;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 
@@ -58,12 +58,12 @@ valnum(x) =
 6 : resistance  ||  7 : Inductance  ||  9 : resistance parallel  ||  
 10 : inductance parallel || 13 : Q factor
 %}
-pause(0.5);
 Freq = valnum(1);%on récup val IAI
 omeg = 2*pi*Freq;
 Res  = valnum(6)-0.075;
 Ind  = valnum(7);
 Z_mes = Res+Ind*omeg*j;
+sig_freq=1.900666666666667e+10;
 %Z_mes =0.215860000000000 + 1.084269810585529i;
 %val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 %delta_Indu=Ind-imag(val_integral)/(2*pi*Freq*1000)
@@ -87,13 +87,13 @@ cup
 %f=@(c1)abs((Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)/real(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)))-(Z_mes/real(Z_mes)))^2;
 
 %f=@(c1)(real(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-real(Z_mes))+(imag(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-imag(Z_mes));
-g=@(f1)abs(Z_integral(coil,f1/1000,t1,l0,[c1_1,0],mu,cup)-Z_mes)^2;
+%g=@(f1)abs(Z_integral(coil,f1/1000,t1,l0,[c1_1,0],mu,cup)-Z_mes)^2;
 %I_ressssss=abs(Z_integral(coil,Freq,t1,l0,[0.61,0],mu,cup)-Z_mes)^2
-f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes);
+f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
 %f=@(c1)abs(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)-Z_integral(coil,Freq,t1,l0,[20.1e6,0],mu,cup))^2;
 %f=@(c1)(Ind-(imag(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup))/(2*pi*Freq*1000)))+(Res-0.078-real(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)));
 fun = @(c1)f(c1);
-gun = @(f1)g(f1);
+%gun = @(f1)g(f1);
 
 %{
  Z_mes
@@ -103,25 +103,36 @@ ABS=abs(Z_mes-(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)))^2
 
 c1_0=5e6;
 f1_0 = 3.5e3;
-options = optimset('PlotFcns',@optimplotfval,'MaxIter', 15);
+options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
 
 
 c_res= fminsearch(fun,c1_0,options)
+
+
 %f_res= fminsearch(gun,f1_0,options)
-Freq
-cond=20.1e6
-%Ind  = valnum(7)
 
-%test_ana = Z_integral(coil,Freq,t1,l0,[c_res,0],mu,cup)
-%test_sim = Z_integral(coil,Freq,t1,l0,[42.2e6,0],mu,cup)
-%test_mes = Z_mes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%{
-f = @(x,a)100*(x(2) - x(1)^2)^2 + (a-x(1))^2;
-a = 3;
-fun = @(x)f(x,a);
-x0 = [-1,1.9];
-x = fminsearch(fun,x0)
-%}
 
+N_Freq=sig_freq/c_res;
+
+fprintf(s,['FREQUE,', num2str(N_Freq)]);
+fprintf(s,'*TRG');
+pause(2);
+fprintf(s,'LCR?');
+val = fscanf(s);
+valnum = str2num(val);
+
+omeg = 2*pi*N_Freq;
+
+Res  = valnum(6)-0.075;
+Ind  = valnum(7);
+
+Z_mes_2 = Res+Ind*omeg*j;
+
+f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
+fun_2 = @(c1)f2(c1);
+c_res_2= fminsearch(fun_2,c1_0,options)
+cond=1.4e6
+
+
+fclose(s);
