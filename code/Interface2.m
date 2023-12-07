@@ -84,22 +84,21 @@ fopen(s);
 
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-Freq_str =1.4e3;
+Freq_str =3.3e3;
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 fprintf(s,['FREQUE,', num2str(Freq_str)]);
 
-m =3;
-for n = 1:m
-    fprintf(s,'BEEP');
-    pause(0.25);
-end
+%m =3;
+%for n = 1:m
+%    fprintf(s,'BEEP');
+ %   pause(0.25);
+%end
 fprintf(s,'LCR?');
 
 
 fclose(s);
 msgbox('Réglage PSM OK')
-
 
 function edit5_Callback(hObject, eventdata, handles)
 % hObject    handle to edit5 (see GCBO)
@@ -176,7 +175,15 @@ sig = [c1_1 c2];
 mu_1=1; %Permeabilites relatives dans les milieux 1 et 2
 mu_2=1;
 mu =[mu_1 mu_2];
-t1 = 20;  %Epaisseur de la plaque conductrice en mm
+
+choice = menu('Regler :','Hauteur');
+prompt = {'Hauteur de :'};
+dlg_title = 'Input';
+num_lines = 1;
+answer = inputdlg(prompt,dlg_title,num_lines);
+x = str2num(answer{1});
+
+t1 = x;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 Freq = valnum(1);%on récup val IAI
@@ -190,7 +197,7 @@ f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
 fun = @(c1)f(c1);
 c1_0=5e6;
 f1_0 = 3.5e3;
-options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
+options = optimset('PlotFcns',@optimplotfval,'MaxIter',10);
 c_res= fminsearch(fun,c1_0,options)
 N_Freq=sig_freq/c_res;
 
@@ -217,8 +224,8 @@ fclose(s);
 
 set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
-set(handles.edit9,'string',valnum(1));
 set(handles.edit8,'string',c_res_2);
+set(handles.edit9,'string',valnum(1));
 
 
 function edit8_Callback(hObject, eventdata, handles)
