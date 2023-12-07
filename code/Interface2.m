@@ -84,21 +84,10 @@ fopen(s);
 
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-
-%fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
-
-Freq_str = get(handles.edit2,'string')
-Freq_str =char(Freq_str);
-
-%class(Freq_str)
-
+Freq_str =1.4e3;
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
-%fprintf(s,'IAI,MANUAL,INDUCTANCE,NORMAL');
-%eval('fprintf(s,FREQUE,' Freq_str ');')
-%eval(['fprintf(s,FREQUE,' Freq_str ');'])
-
-fprintf(s,['FREQUE,' Freq_str]);
+fprintf(s,['FREQUE,', num2str(Freq_str)]);
 
 m =3;
 for n = 1:m
@@ -110,53 +99,6 @@ fprintf(s,'LCR?');
 
 fclose(s);
 msgbox('Réglage PSM OK')
-
-
-
-function edit2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit2 as text
-%        str2double(get(hObject,'String')) returns contents of edit2 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function edit2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 
 
 function edit5_Callback(hObject, eventdata, handles)
@@ -180,13 +122,6 @@ function edit5_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-%{
-s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port 
-fopen(s);
-val = fscanf(s);
-valnum = str2num(val);
-fclose(s);
-%}
 
 function edit6_Callback(hObject, eventdata, handles)
 % hObject    handle to edit6 (see GCBO)
@@ -222,33 +157,68 @@ fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 fprintf(s,'LCR?');
 val = fscanf(s);
+valnum = str2num(val);
+
+
+r1  = 10.23;        %rayon interieur bobine d = 20.46
+r2  = 21.315;       %rayon exterieur bobine d = 42.63 mm
+l3      = 2.45;   %hauteur bobine 
+turn    = 20;     %nombre de spires
+coil = [r1 r2 l3 turn];
+sigma     = 0;     %conductivite du couvercle
+mu_r      = 1000;     %permeabilite du couvercle
+epaisseur = 2.21;     %epaisseur du couvercle
+l4        = 0.1;     %distance bobine au couvercle
+cup =[sigma,mu_r,epaisseur,l4];
+c1_1=0.61e6; %Conductivites m1
+c2 = 0 ; %Conductivites m2
+sig = [c1_1 c2];
+mu_1=1; %Permeabilites relatives dans les milieux 1 et 2
+mu_2=1;
+mu =[mu_1 mu_2];
+t1 = 20;  %Epaisseur de la plaque conductrice en mm
+l0 = 0;  %Distance capteur-cible en mm
+
+Freq = valnum(1);%on récup val IAI
+omeg = 2*pi*Freq;
+Res  = valnum(6)-0.075;
+Ind  = valnum(7);
+Z_mes = Res+Ind*omeg*j;
+sig_freq=1.900666666666667e+10;
+
+f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
+fun = @(c1)f(c1);
+c1_0=5e6;
+f1_0 = 3.5e3;
+options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
+c_res= fminsearch(fun,c1_0,options)
+N_Freq=sig_freq/c_res;
+
+fprintf(s,['FREQUE,', num2str(N_Freq)]);
+fprintf(s,'*TRG');
+pause(2);
+fprintf(s,'LCR?');
+val = fscanf(s);
+valnum = str2num(val);
+
+omeg = 2*pi*N_Freq;
+
+Res  = valnum(6)-0.075;
+Ind  = valnum(7);
+
+Z_mes_2 = Res+Ind*omeg*j;
+
+f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
+fun_2 = @(c1)f2(c1);
+c_res_2= fminsearch(fun_2,c1_0,options)
+cond=1.4e6
 
 fclose(s);
 
-valnum = str2num(val);
 set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
-%msgbox(sprintf('%d', valnum(7)))
-
-
-% --- Executes during object creation, after setting all properties.
-function axes3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to axes3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: place code in OpeningFcn to populate axes3
-imshow('C:\travail\sadeler\projet_git\mesures_sans_contact_obj_met\code\imageBG.png')
-
-function axes1CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-imshow('C:\travail\mesures_sans_contact_obj_met\code\image-removebg-preview (1).png')
-
+set(handles.edit9,'string',valnum(1));
+set(handles.edit8,'string',c_res_2);
 
 
 function edit8_Callback(hObject, eventdata, handles)

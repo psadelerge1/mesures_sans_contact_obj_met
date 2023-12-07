@@ -9,13 +9,13 @@ for n = 1:m
     pause(0.5);
 end
 fprintf(s,'LCR?');
-fscanf(s)
+%fscanf(s)
 val = fscanf(s);
 
 fclose(s);
 
-valnum = str2num(val);
-valnum(7)
+%valnum = str2num(val);
+%valnum(7)
 %{
 valnum(x) =>
 
