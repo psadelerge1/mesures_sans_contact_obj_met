@@ -12,7 +12,7 @@ for n = 1:m
 end
 %}
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,3e3');
+fprintf(s,'FREQUE,3.3e3');
 pause(2);
 fprintf(s,'*TRG');
 pause(2);
@@ -34,7 +34,7 @@ epaisseur = 2.21;     %epaisseur du couvercle
 l4        = 0.1;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
-c1_1=0.61e6; %Conductivites m1
+c1_1=14.8e6; %Conductivites m1
 c2 = 0 ; %Conductivites m2
 sig = [c1_1 c2];
 
@@ -43,7 +43,7 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 20;  %Epaisseur de la plaque conductrice en mm
+t1 = 52;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 
@@ -113,12 +113,14 @@ c_res= fminsearch(fun,c1_0,options)
 
 
 
-N_Freq=sig_freq/c_res;
+N_Freq=sig_freq/c_res
 
 fprintf(s,['FREQUE,', num2str(N_Freq)]);
 fprintf(s,'*TRG');
 pause(2);
 fprintf(s,'LCR?');
+pause(2);
+
 val = fscanf(s);
 valnum = str2num(val);
 
@@ -132,7 +134,7 @@ Z_mes_2 = Res+Ind*omeg*j;
 f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
 fun_2 = @(c1)f2(c1);
 c_res_2= fminsearch(fun_2,c1_0,options)
-cond=1.4e6
+
 
 
 fclose(s);
