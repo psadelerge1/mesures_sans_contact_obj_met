@@ -45,7 +45,7 @@ try
     mu_2 = 1;
     mu = [mu_1, mu_2];
 
-    t1 = 52;
+    t1 = 35;
     l0 = 0;
 
     % Fonction d'optimisation
@@ -57,10 +57,10 @@ try
     options = optimset('PlotFcns', @optimplotfval, 'MaxIter', 15);
 
     % Optimisation
-    c_res = fminsearch(fun, c1_0, options);
+    c_res= fminsearch(fun,c1_0,options)
 
     % Calcul de la nouvelle fréquence en fonction de la conductivité optimale
-    N_Freq = sig_freq / c_res;
+    N_Freq = sig_freq/c_res
 
     % Réouverture du port série pour la nouvelle configuration
     fopen(s);
@@ -86,7 +86,7 @@ try
     fun_2 = @(c1) f2(c1);
 
     % Optimisation pour la nouvelle fréquence
-    c_res_2 = fminsearch(fun_2, c1_0, options);
+    c_res_2 = fminsearch(fun_2, c1_0, options)
 
     % Fermeture du port série
     fclose(s);

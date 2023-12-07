@@ -43,7 +43,7 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 52;  %Epaisseur de la plaque conductrice en mm
+t1 = 4;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 

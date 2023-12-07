@@ -225,7 +225,7 @@ fclose(s);
 set(handles.edit5,'string',valnum(7));
 set(handles.edit6,'string',valnum(6));
 set(handles.edit8,'string',c_res_2);
-set(handles.edit9,'string',valnum(1));
+set(handles.edit9,'string',N_Freq(1));
 
 
 function edit8_Callback(hObject, eventdata, handles)
