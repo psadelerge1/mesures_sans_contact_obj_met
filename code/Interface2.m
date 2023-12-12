@@ -23,7 +23,7 @@ function varargout = Interface2(varargin)
 
 % Edit the above text to modify the response to help Interface2
 
-% Last Modified by GUIDE v2.5 05-Dec-2023 11:39:42
+% Last Modified by GUIDE v2.5 12-Dec-2023 09:16:37
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -177,11 +177,11 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 choice = menu('Regler :','Hauteur');
-prompt = {'Hauteur de :'};
+prompt = {'Hauteur en mm :'};
 dlg_title = 'Input';
 num_lines = 1;
 answer = inputdlg(prompt,dlg_title,num_lines);
-x = str2num(answer{1});
+x = answer{1};
 
 t1 = x;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
@@ -223,8 +223,11 @@ cond=1.4e6
 fclose(s);
 
 set(handles.edit5,'string',valnum(7));
+pause(0.5);
 set(handles.edit6,'string',valnum(6));
+pause(0.5);
 set(handles.edit8,'string',c_res_2);
+pause(0.5);
 set(handles.edit9,'string',N_Freq(1));
 
 
@@ -271,3 +274,17 @@ function edit9_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
