@@ -12,12 +12,13 @@ for n = 1:m
 end
 %}
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,3.3e3');
+fprintf(s,'FREQUE,700');
 pause(2);
 fprintf(s,'*TRG');
 pause(3);
 fprintf(s,'LCR?');
 val = fscanf(s);
+
 
 
 
@@ -30,8 +31,8 @@ coil = [r1 r2 l3 turn];
 
 sigma     = 0;     %conductivite du couvercle
 mu_r      = 1000;     %permeabilite du couvercle
-epaisseur = 2.21;     %epaisseur du couvercle
-l4        = 0.1;     %distance bobine au couvercle
+epaisseur = 0.4;     %epaisseur du couvercle
+l4        = 0;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
 c1_1=20.1e6; %Conductivites m1
@@ -63,7 +64,7 @@ omeg = 2*pi*Freq;
 Res  = valnum(6)-0.36;
 Ind  = valnum(7);
 Z_mes = Res+Ind*omeg*j;
-sig_freq=1.900666666666667e+10;
+sig_freq=5.666666666666667e+09;
 %Z_mes =0.215860000000000 + 1.084269810585529i;
 %val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 %delta_Indu=Ind-imag(val_integral)/(2*pi*Freq*1000)
@@ -107,7 +108,7 @@ options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
 
 
 c_res= fminsearch(fun,c1_0,options)
-
+Freq
 
 %f_res= fminsearch(gun,f1_0,options)
 
@@ -126,7 +127,7 @@ valnum = str2num(val);
 
 omeg = 2*pi*N_Freq;
 
-Res  = valnum(6)-0.075;
+Res  = valnum(6)-0.36;
 Ind  = valnum(7);
 
 Z_mes_2 = Res+Ind*omeg*j;
