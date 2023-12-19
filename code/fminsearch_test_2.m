@@ -1,4 +1,3 @@
-
 s = serial('COM1','BaudRate',19200,'Terminator','CR/LF'); %Create a serial port  
 fopen(s);
 %{

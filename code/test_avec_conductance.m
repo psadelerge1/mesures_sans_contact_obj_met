@@ -1,3 +1,7 @@
-%test avec conductance
+x=54500000;
 
-%G=?(S/I)à
+
+y=58.2e6;
+
+
+res = ((100*x)/y)-100

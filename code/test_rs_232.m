@@ -14,8 +14,8 @@ val = fscanf(s);
 
 fclose(s);
 
-%valnum = str2num(val);
-%valnum(7)
+valnum = str2num(val);
+%valnum(6)
 %{
 valnum(x) =>
 
