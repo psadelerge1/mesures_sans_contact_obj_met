@@ -21,12 +21,11 @@ val = fscanf(s);
 
 
 
-r1  = 4.35;        %rayon interieur bobine d = 20.46
-r2  = 8.25;       %rayon exterieur bobine d = 42.63 mm
-l3      = 0.4;   %hauteur bobine 
-turn    = 22;     %nombre de spires
+r1  = 10.23;        %rayon interieur bobine d = 20.46
+r2  = 21.315;       %rayon exterieur bobine d = 42.63 mm
+l3      = 2.45;   %hauteur bobine 
+turn    = 20;     %nombre de spires
 coil = [r1 r2 l3 turn];
-
 sigma     = 0;     %conductivite du couvercle
 mu_r      = 1000;     %permeabilite du couvercle
 epaisseur = 2.21;     %epaisseur du couvercle
