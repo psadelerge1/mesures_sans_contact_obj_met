@@ -11,7 +11,7 @@ for n = 1:m
 end
 %}
 fprintf(s,'OUTPUT,ON');
-fprintf(s,'FREQUE,3.3e3');
+fprintf(s,'FREQUE,700');
 pause(2);
 fprintf(s,'*TRG');
 pause(3);
@@ -21,15 +21,18 @@ val = fscanf(s);
 
 
 
-r1  = 10.23;        %rayon interieur bobine d = 20.46
-r2  = 21.315;       %rayon exterieur bobine d = 42.63 mm
-l3      = 2.45;   %hauteur bobine 
-turn    = 20;     %nombre de spires
+
+r1  = 4.35;        %rayon interieur bobine 
+r2  = 8.25;       %rayon exterieur bobine 
+
+l3      = 0.4;   %hauteur bobine 
+turn    = 22;     %nombre de spires
 coil = [r1 r2 l3 turn];
+
 sigma     = 0;     %conductivite du couvercle
 mu_r      = 1000;     %permeabilite du couvercle
-epaisseur = 2.21;     %epaisseur du couvercle
-l4        = 0.1;     %distance bobine au couvercle
+epaisseur = 0.4;     %epaisseur du couvercle
+l4        = 0;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
 c1_1=20.1e6; %Conductivites m1
@@ -41,7 +44,8 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 25;  %Epaisseur de la plaque conductrice en mm
+%
+t1 = 1;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
 
 
@@ -61,7 +65,7 @@ omeg = 2*pi*Freq;
 Res  = valnum(6)-0.36;
 Ind  = valnum(7);
 Z_mes = Res+Ind*omeg*j;
-sig_freq=1.900666666666667e+10;
+sig_freq=5.666666666666667e+09;
 %Z_mes =0.215860000000000 + 1.084269810585529i;
 %val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup);
 %delta_Indu=Ind-imag(val_integral)/(2*pi*Freq*1000)
@@ -87,31 +91,37 @@ cup
 %f=@(c1)(real(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-real(Z_mes))+(imag(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup))-imag(Z_mes));
 %g=@(f1)abs(Z_integral(coil,f1/1000,t1,l0,[c1_1,0],mu,cup)-Z_mes)^2;
 %I_ressssss=abs(Z_integral(coil,Freq,t1,l0,[0.61,0],mu,cup)-Z_mes)^2
-f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
-%f=@(c1)abs(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)-Z_integral(coil,Freq,t1,l0,[20.1e6,0],mu,cup))^2;
+
+%fun=@(x)abs(Z_integral(coil,Freq/1000,x(1),l0,[x(2),0],mu,cup)-Z_mes)^2   ;
+
+fun=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
 %f=@(c1)(Ind-(imag(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup))/(2*pi*Freq*1000)))+(Res-0.078-real(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)));
-fun = @(c1)f(c1);
+%fun = @(x0)f(x0);
 %gun = @(f1)g(f1);
 
 %{
- Z_mes
+Z_mes
 Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)
 ABS=abs(Z_mes-(Z_integral(coil,Freq,t1,l0,[c1,0],mu,cup)))^2
 %}
 
 c1_0=5e6;
+t1_0=10;
+x0=5e6; 
 f1_0 = 3.5e3;
-options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
+options = optimset('PlotFcns',@optimplotfval,'MaxIter',20);
 
 
+%c_res= fminsearch(fun,x0,options)
 c_res= fminsearch(fun,c1_0,options)
 
-
+Freq
+%1 = épaisseur 2 = conductivité c_res(1)
 %f_res= fminsearch(gun,f1_0,options)
 
 
 
-N_Freq=sig_freq/c_res
+N_Freq=sig_freq/c_res%(2)
 
 fprintf(s,['FREQUE,', num2str(N_Freq)]);
 fprintf(s,'*TRG');
@@ -124,13 +134,15 @@ valnum = str2num(val);
 
 omeg = 2*pi*N_Freq;
 
-Res  = valnum(6)-0.075;
+Res  = valnum(6)-0.36;
 Ind  = valnum(7);
 
 Z_mes_2 = Res+Ind*omeg*j;
 
-f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
-fun_2 = @(c1)f2(c1);
+%fun_2=@(x)abs(Z_integral(coil,N_Freq/1000,x(1),l0,[x(2),0],mu,cup)-Z_mes)^2;
+fun_2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
+
+%fun_2 = @(x)f2(c1);
 c_res_2= fminsearch(fun_2,c1_0,options)
 
 

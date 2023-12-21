@@ -24,6 +24,6 @@ l0 = 0.1;  %Distance capteur-cible en mm
 val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup)
 Val_L=imag(val_integral)/(2*pi*Freq)
 Val_R=real(val_integral)
-test_r_r=val_integral-real(0.078)
+test_r_r=val_integral-real(0.362)
 %   Val_min=fminsearch(4.580922583797834e-06,c1)
 
