@@ -140,7 +140,7 @@ Ind  = valnum(7);
 Z_mes_2 = Res+Ind*omeg*j;
 
 %fun_2=@(x)abs(Z_integral(coil,N_Freq/1000,x(1),l0,[x(2),0],mu,cup)-Z_mes)^2;
-c1_0 = c_res;
+
 fun_2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
 
 %fun_2 = @(x)f2(c1);

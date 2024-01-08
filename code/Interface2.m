@@ -328,6 +328,9 @@ options = optimset('PlotFcns',@optimplotfval,'MaxIter',10); %Limite le nombre it
 c_res= fminsearch(fun,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues
 N_Freq=sig_freq/c_res;
 
+
+
+
 fprintf(s,['FREQUE,', num2str(N_Freq)]); %Affichage de la frequence apres optimisation
 fprintf(s,'*TRG');%Configure TRG du PSM
 pause(2); %Attente de 2 secondes 

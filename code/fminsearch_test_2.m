@@ -21,18 +21,17 @@ val = fscanf(s);
 
 
 
-r1  = 10.23;        %rayon interieur bobine d = 20.46
-r2  = 21.315;       %rayon exterieur bobine d = 42.63 mm
-l3      = 2.45;   %hauteur bobine 
-turn    = 20;     %nombre de spires
+l3      = 0.4;   %hauteur bobine 
+turn    = 22;     %nombre de spires
 coil = [r1 r2 l3 turn];
+
 sigma     = 0;     %conductivite du couvercle
 mu_r      = 1000;     %permeabilite du couvercle
-epaisseur = 2.21;     %epaisseur du couvercle
-l4        = 0.1;     %distance bobine au couvercle
+epaisseur = 0.4;     %epaisseur du couvercle
+l4        = 0;     %distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
 
-c1_1=20.1e6; %Conductivites m1
+c1_1=59e6; %Conductivites m1
 c2 = 0 ; %Conductivites m2
 sig = [c1_1 c2];
 
@@ -41,8 +40,10 @@ mu_2=1;
 mu =[mu_1 mu_2];
 
 %Freq = 33; %en kHz
-t1 = 25;  %Epaisseur de la plaque conductrice en mm
+%
+t1 = 59;  %Epaisseur de la plaque conductrice en mm
 l0 = 0;  %Distance capteur-cible en mm
+
 
 
 
@@ -106,11 +107,11 @@ options = optimset('PlotFcns',@optimplotfval,'MaxIter',15);
 
 c_res= fminsearch(fun,c1_0,options)
 
-
+fclose(s);
 %f_res= fminsearch(gun,f1_0,options)
 
 
-
+%{
 N_Freq=sig_freq/c_res
 
 fprintf(s,['FREQUE,', num2str(N_Freq)]);
@@ -136,3 +137,4 @@ c_res_2= fminsearch(fun_2,c1_0,options)
 
 
 fclose(s);
+%}
