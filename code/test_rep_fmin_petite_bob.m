@@ -1,7 +1,7 @@
 % Création du port série
 s = serial('COM1', 'BaudRate', 19200, 'Terminator', 'CR/LF'); 
 fopen(s);
-
+ 
 try
     % Configuration initiale
     fprintf(s, 'OUTPUT,ON');
@@ -11,6 +11,7 @@ try
     pause(2);
     fprintf(s, 'LCR?');
     val = fscanf(s);
+      
     
     % Fermeture du port série
     fclose(s);
