@@ -18,7 +18,7 @@ mu_1=1; %Permeabilites relatives dans les milieux 1 et 2
 mu_2=1;
 mu =[mu_1 mu_2];
 
-Freq = 33000; %en kHz
+Freq = 3000; %en kHz
 t1 = 25;  %Epaisseur de la plaque conductrice en mm
 l0 = 0.1;  %Distance capteur-cible en mm
 val_integral = Z_integral(coil,Freq,t1,l0,sig,mu,cup)

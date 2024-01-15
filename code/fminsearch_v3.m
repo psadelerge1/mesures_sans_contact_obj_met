@@ -45,7 +45,7 @@ try
     mu_2 = 1;
     mu = [mu_1, mu_2];
 
-    t1 = 35;
+    t1 = 1;
     l0 = 0;
 
     % Fonction d'optimisation

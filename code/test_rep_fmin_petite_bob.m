@@ -10,15 +10,15 @@ try
     fprintf(s, '*TRG');
     pause(2);
     fprintf(s, 'LCR?');
-    val = fscanf(s);
+    val = fscanf(s)
     
     % Fermeture du port série
     fclose(s);
 
     % Conversion de la chaîne reçue en valeurs numériques
-    valnum = str2num(val);
+    valnum = str2num(val)
     
-    Freq = valnum(1);
+    Freq = valnum(1)
     omeg = 2 * pi * Freq;
     Res = valnum(6) - 0.362;
     Ind = valnum(7);
@@ -45,17 +45,18 @@ try
     mu_2 = 1;
     mu = [mu_1, mu_2];
 
-    t1 = 25;
+    t1 = 1;
     l0 = 0;
 
     % Fonction d'optimisation
-    f = @(c1) abs(Z_integral(coil, Freq/1000, t1, l0, [c1, 0], mu, cup) - Z_mes)^2;
-    fun = @(c1) f(c1);
+    %f = @(c1) abs(Z_integral(coil, Freq/1000, t1, l0, [c1, 0], mu, cup) - Z_mes)^2;
+    %fun = @(c1) f(c1);
 
     % Paramètres d'optimisation
-    c1_0 = 5e6;
-    options = optimset('PlotFcns', @optimplotfval, 'MaxIter', 15);
-    sig_freq =8e9;
+    c1_0 = 6e6;
+    %options = optimset('PlotFcns', @optimplotfval, 'MaxIter', 15);
+    sig_freq =5.666666666666667e+09;
+    N_Freq =sig_freq/c1_0
 
     % Optimisation
     %c_res= fminsearch(fun,c1_0,options)
@@ -64,29 +65,17 @@ try
    % N_Freq = sig_freq/c_res
 
     % Réouverture du port série pour la nouvelle configuration
+    a='start'
     fopen(s);
-options = optimset('PlotFcns',@optimplotfval,'MaxIter',5);
+    options = optimset('PlotFcns',@optimplotfval,'MaxIter',10);
+   
     for c = 1:5
-        N_Freq = sig_freq/c_res
-        fprintf(s, ['FREQUE,', num2str(N_Freq)]);
-        fprintf(s, '*TRG');
-        pause(2);
-        fprintf(s, 'LCR?');
-        pause(2);
-    
-        % Mise à jour de la fréquence
-        fprintf(s, ['FREQUE,', num2str(N_Freq)]);
-        fprintf(s, '*TRG');
-        pause(2);
-        fprintf(s, 'LCR?');
-        pause(2);
-
         % Nouvelle lecture des données
-        val = fscanf(s);
-        valnum = str2num(val);
-
+        
+      
+        
         omeg = 2 * pi * N_Freq;
-        Res = valnum(6) - 0.362;
+        Res = valnum(6) - 0.36;
         Ind = valnum(7);
         Z_mes_2 = Res + Ind * omeg * 1j;
 
@@ -97,7 +86,16 @@ options = optimset('PlotFcns',@optimplotfval,'MaxIter',5);
         % Optimisation pour la nouvelle fréquence
         c_res = fminsearch(fun_2, c1_0, options)
         
-        
+        N_Freq = sig_freq/c_res
+        fprintf(s, ['FREQUE,', num2str(N_Freq)]);
+        fprintf(s, '*TRG');
+        pause(2);
+        fprintf(s, 'LCR?');
+        pause(2);
+        val = fscanf(s);
+        valnum = str2num(val);
+        N_Freq = valnum(1);
+    
     end
     a='fin'
     %{

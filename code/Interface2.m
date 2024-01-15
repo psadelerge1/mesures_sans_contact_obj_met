@@ -84,7 +84,7 @@ fopen(s);
 fprintf(s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 Freq_str =3.3e3;
-fprintf s,'*TRG');
+fprintf (s,'*TRG');
 fprintf(s,'OUTPUT,ON');
 fprintf(s,['FREQUE,', num2str(Freq_str)]);
 fprintf(s,'LCR?');
@@ -235,7 +235,7 @@ fun = @(c1)f(c1);
 c1_0=5e6;
 f1_0 = 3.5e3;
 
-options = optimset('PlotFcns',@optimplotfval,'MaxIter',10); %Limite le nombre ittération pendant les mesures 
+options = optimset('MaxIter',10); %Limite le nombre ittération pendant les mesures 
 c_res= fminsearch(fun,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues
 N_Freq=sig_freq/c_res;
 
@@ -254,7 +254,7 @@ Z_mes_2 = Res+Ind*omeg*j;%Formule de la conductivite mesure une deuxieme fois
 f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
 fun_2 = @(c1)f2(c1);
 c_res_2= fminsearch(fun_2,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues une deuxieme fois
-cond=1.4e6
+
 
 fclose(s); %Fermeture de la liaison avce le PSM et IAI
 
@@ -275,25 +275,20 @@ fopen(s); % Ouverture de la laisaion
 fprintf(s,'*TRG');%Configure TRG du PSM
 fprintf(s,'OUTPUT,ON'); %Configure OUTPUT du PSM
 fprintf(s,'LCR?');%Configure LCR du PSM
-fprintf(s,'*TRG');
-fprintf(s,'OUTPUT,ON');
-fprintf(s,'LCR?');
-
 val = fscanf(s);
 valnum = str2num(val);
 
-r1  = 4.35;        %Rayon interieur bobine 
-r2  = 8.25;       %Rayon exterieur bobine 
-
+r1  = 4.35;        %Rayon interieur bobine d = 20.46
+r2  = 8.25;       %Rayon exterieur bobine d = 42.63 mm
 l3      = 0.4;   %Hauteur bobine 
 turn    = 22;     %Nombre de spires
 coil = [r1 r2 l3 turn];
-
-sigma     = 0;     %conductivite du couvercle
+sigma     = 0;     %Conductivite du couvercle
 mu_r      = 1000;     %Permeabilite du couvercle
 epaisseur = 0.4;     %Epaisseur du couvercle
-l4        = 0;     %Distance bobine au couvercle
+l4        = 0.1;     %Distance bobine au couvercle
 cup =[sigma,mu_r,epaisseur,l4];
+
 
 c1_1=0.61e6; %Conductivites m1
 c2 = 0 ; %Conductivites m2
@@ -314,22 +309,20 @@ l0 = 0;  %Distance capteur-cible en mm
 
 Freq = valnum(1);%On récup val IAI
 omeg = 2*pi*Freq;%Formule de la pulsation
-Res  = valnum(6)-0.075;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
+Res  = valnum(6)-0.361;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
 Ind  = valnum(7); %Atribue la valeur de l'inductance du PSM a la variable Ind
 Z_mes = Res+Ind*omeg*j; %Formule de la conductivite mesure
-sig_freq=1.900666666666667e+10;
+sig_freq=5.666666666666667e+09;
 f=@(c1)abs(Z_integral(coil,Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes)^2;
 fun = @(c1)f(c1);
 
-c1_0=5e6;
+c1_0=6e6;
 f1_0 = 3.5e3;
+N_Freq =sig_freq/c1_0
 
 options = optimset('PlotFcns',@optimplotfval,'MaxIter',10); %Limite le nombre ittération pendant les mesures 
 c_res= fminsearch(fun,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues
 N_Freq=sig_freq/c_res;
-
-
-
 
 fprintf(s,['FREQUE,', num2str(N_Freq)]); %Affichage de la frequence apres optimisation
 fprintf(s,'*TRG');%Configure TRG du PSM
@@ -340,7 +333,7 @@ val = fscanf(s);
 valnum = str2num(val); %Conversion d'un string en valeur numérique 
 
 omeg = 2*pi*N_Freq; %Formule de la pulsation
-Res  = valnum(6)-0.075;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
+Res  = valnum(6)-0.36;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
 Ind  = valnum(7); %Attribue la valeurs de l'inductance du PSM a la variable Ind 
 Z_mes_2 = Res+Ind*omeg*j;%Formule de la conductivite mesure une deuxieme fois 
 f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
@@ -356,7 +349,8 @@ set(handles.edit6,'string',valnum(6));%Attribue les valeurs de la resistance du 
 pause(0.5);%Attente de 0.5 secondes 
 set(handles.edit8,'string',c_res_2);%Attribue les valeurs de la conductivite du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
-set(handles.edit9,'string',N_Freq(1));%Attribue les valeurs de la fréquence du PSM sur les "EDIT" pour l'affichage
+set(handles.edit9,'string',N_Freq(1));%Attribue les valeurs de la fréquence du PSM sur les "EDIT" pour l'affichage 
+
 
 
 function edit10_Callback(hObject, eventdata, handles)
