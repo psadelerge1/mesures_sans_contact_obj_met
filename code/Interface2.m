@@ -237,7 +237,7 @@ f1_0 = 3.5e3;
 
 options = optimset('MaxIter',10); %Limite le nombre ittération pendant les mesures 
 c_res= fminsearch(fun,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues
-N_Freq=sig_freq/c_res;
+N_Freq=3316;
 
 fprintf(s,['FREQUE,', num2str(N_Freq)]); %Affichage de la frequence apres optimisation
 fprintf(s,'*TRG');%Configure TRG du PSM
@@ -246,7 +246,7 @@ fprintf(s,'LCR?'); %Configure LCR du PSM
 
 val = fscanf(s);
 valnum = str2num(val); %Conversion d'un string en valeur numérique 
-
+%{
 omeg = 2*pi*N_Freq; %Formule de la pulsation
 Res  = valnum(6)-0.075;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
 Ind  = valnum(7); %Attribue la valeurs de l'inductance du PSM a la variable Ind 
@@ -254,15 +254,42 @@ Z_mes_2 = Res+Ind*omeg*j;%Formule de la conductivite mesure une deuxieme fois
 f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
 fun_2 = @(c1)f2(c1);
 c_res_2= fminsearch(fun_2,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues une deuxieme fois
+%}
+for c = 1:2
+        % Nouvelle lecture des données
+        
+      
+        
+        omeg = 2 * pi * N_Freq;
+        Res = valnum(6) - 0.075;
+        Ind = valnum(7);
+        Z_mes_2 = Res + Ind * omeg * 1j;
 
+        % Nouvelle fonction d'optimisation
+        f2 = @(c1) abs(Z_integral(coil, N_Freq/1000, t1, l0, [c1, 0], mu, cup) - Z_mes_2)^2;
+        fun_2 = @(c1) f2(c1);
 
+        % Optimisation pour la nouvelle fréquence
+        c_res = fminsearch(fun_2, c1_0, options)
+        
+        N_Freq = sig_freq/c_res
+        fprintf(s, ['FREQUE,', num2str(N_Freq)]);
+        fprintf(s, '*TRG');
+        pause(2);
+        fprintf(s, 'LCR?');
+        pause(2);
+        val = fscanf(s);
+        valnum = str2num(val);
+        N_Freq = valnum(1);
+    
+    end
 fclose(s); %Fermeture de la liaison avce le PSM et IAI
 
 set(handles.edit5,'string',valnum(7)); %Attribue les valeurs de l'inductance du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
 set(handles.edit6,'string',valnum(6));%Attribue les valeurs de la resistance du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
-set(handles.edit8,'string',c_res_2);%Attribue les valeurs de la conductivite du PSM sur les "EDIT" pour l'affichage 
+set(handles.edit8,'string',c_res);%Attribue les valeurs de la conductivite du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
 set(handles.edit9,'string',N_Freq(1));%Attribue les valeurs de la fréquence du PSM sur les "EDIT" pour l'affichage 
 
@@ -320,7 +347,7 @@ c1_0=6e6;
 f1_0 = 3.5e3;
 N_Freq =sig_freq/c1_0
 
-options = optimset('PlotFcns',@optimplotfval,'MaxIter',10); %Limite le nombre ittération pendant les mesures 
+options = optimset('MaxIter',10); %Limite le nombre ittération pendant les mesures 
 c_res= fminsearch(fun,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues
 N_Freq=sig_freq/c_res;
 
@@ -332,6 +359,7 @@ fprintf(s,'LCR?'); %Configure LCR du PSM
 val = fscanf(s);
 valnum = str2num(val); %Conversion d'un string en valeur numérique 
 
+%{
 omeg = 2*pi*N_Freq; %Formule de la pulsation
 Res  = valnum(6)-0.36;%Attribue la valeurs de la ressiatnce du PSM a la variable Res 
 Ind  = valnum(7); %Attribue la valeurs de l'inductance du PSM a la variable Ind 
@@ -339,7 +367,37 @@ Z_mes_2 = Res+Ind*omeg*j;%Formule de la conductivite mesure une deuxieme fois
 f2=@(c1)abs(Z_integral(coil,N_Freq/1000,t1,l0,[c1,0],mu,cup)-Z_mes_2)^2;
 fun_2 = @(c1)f2(c1);
 c_res_2= fminsearch(fun_2,c1_0,options)%Ajuste les paramètres en fonction des mesures obtenues une deuxieme fois
+
 cond=1.4e6
+%}
+for c = 1:2
+        % Nouvelle lecture des données
+        
+      
+        
+        omeg = 2 * pi * N_Freq;
+        Res = valnum(6) - 0.363;
+        Ind = valnum(7);
+        Z_mes_2 = Res + Ind * omeg * 1j;
+
+        % Nouvelle fonction d'optimisation
+        f2 = @(c1) abs(Z_integral(coil, N_Freq/1000, t1, l0, [c1, 0], mu, cup) - Z_mes_2)^2;
+        fun_2 = @(c1) f2(c1);
+
+        % Optimisation pour la nouvelle fréquence
+        c_res = fminsearch(fun_2, c1_0, options)
+        
+        N_Freq = sig_freq/c_res
+        fprintf(s, ['FREQUE,', num2str(N_Freq)]);
+        fprintf(s, '*TRG');
+        pause(2);
+        fprintf(s, 'LCR?');
+        pause(2);
+        val = fscanf(s);
+        valnum = str2num(val);
+        N_Freq = valnum(1);
+    
+    end
 
 fclose(s); %Fermeture de la liaison avce le PSM et IAI
 
@@ -347,7 +405,7 @@ set(handles.edit5,'string',valnum(7)); %Attribue les valeurs de l'inductance du 
 pause(0.5);%Attente de 0.5 secondes 
 set(handles.edit6,'string',valnum(6));%Attribue les valeurs de la resistance du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
-set(handles.edit8,'string',c_res_2);%Attribue les valeurs de la conductivite du PSM sur les "EDIT" pour l'affichage 
+set(handles.edit8,'string',c_res);%Attribue les valeurs de la conductivite du PSM sur les "EDIT" pour l'affichage 
 pause(0.5);%Attente de 0.5 secondes 
 set(handles.edit9,'string',N_Freq(1));%Attribue les valeurs de la fréquence du PSM sur les "EDIT" pour l'affichage 
 
